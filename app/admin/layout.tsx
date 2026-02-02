@@ -113,7 +113,7 @@ export default function AdminLayout({
                     className={cn(
                       "flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-colors",
                       isActive
-                        ? "bg-primary text-white font-bold"
+                        ? "bg-primary text-black font-bold"
                         : "text-muted-foreground font-medium hover:bg-secondary/40 hover:text-foreground"
                     )}
                   >

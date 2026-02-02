@@ -101,7 +101,7 @@ export function TeamSection() {
             <div className="w-full md:w-5/12 shrink-0">
               <div className="aspect-[4/5] relative overflow-hidden rounded-2xl shadow-md">
                 <Image
-                  src="/professional-indian-man-in-formal-attire-office-se.jpg"
+                  src="/professional-indian-man-in-formal-attire-office-se.jpeg"
                   alt="Dhruv Ingale"
                   fill
                   className="object-cover"
