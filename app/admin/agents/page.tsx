@@ -107,10 +107,16 @@ export default function AgentsPage() {
     };
 
     // Filter Agents
-    const filteredAgents = agents.filter(agent =>
-        agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (agent.phone && agent.phone.includes(searchQuery))
-    )
+    const ownerAgentNames = new Set(agreements.map(a => a.owner?.agentName).filter(Boolean));
+
+    const filteredAgents = agents.filter(agent => {
+        const matchesSearch = agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (agent.phone && agent.phone.includes(searchQuery));
+
+        const isOwnerAgent = ownerAgentNames.has(agent.name);
+
+        return matchesSearch && isOwnerAgent;
+    })
 
     return (
         <div className="space-y-6 max-w-7xl mx-auto p-4 md:p-8">

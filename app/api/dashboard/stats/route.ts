@@ -43,6 +43,9 @@ export async function GET() {
     // Active clients (unique clients from all agreements)
     const activeClients = new Set();
     agreements.forEach((agreement: any) => {
+      // ✅ Only count clients from active (non-completed) agreements
+      if (agreement.status === "completed") return;
+
       if (agreement.owner?.clientName) activeClients.add(agreement.owner.clientName);
       if (agreement.tenant?.clientName) activeClients.add(agreement.tenant.clientName);
     });

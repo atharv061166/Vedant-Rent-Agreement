@@ -8,10 +8,9 @@ const _inter = Inter({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "RentSecure - Pr Rent Agreement Services",
+  title: "Rent Agreement Services in Pune | Vedant Enterprise",
   description:
-    "Trusted rent agreement services with over 5000+ agreements completed. Fast, reliable, and legally compliant documentation.",
-  generator: 'v0.app'
+    "Vedant Enterprise provides fast, legal, and affordable rent agreement services in Pune. Doorstep biometric process, same-day registration, and trusted documentation.",
 }
 
 export default function RootLayout({
@@ -20,9 +19,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    // Added suppressHydrationWarning to fix the extension error
     <html lang="en" suppressHydrationWarning>
-      <body className={`font-sans antialiased`}>
+      <body className="font-sans antialiased">
         {children}
         <Analytics />
       </body>

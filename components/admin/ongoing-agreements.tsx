@@ -151,9 +151,7 @@ const CreateFolderDialog = ({
     if (formData.ownerAgent) {
       agentsToCreate.push({ name: formData.ownerAgent, phone: "", email: "" });
     }
-    if (formData.tenantAgent) {
-      agentsToCreate.push({ name: formData.tenantAgent, phone: "", email: "" });
-    }
+    // Tenant agent creation removed as per requirements
 
     // Process agent creation in background (don't block UI)
     agentsToCreate.forEach(agent => {

@@ -48,7 +48,7 @@ export function ClientManagement() {
   useEffect(() => {
     if (selectedClient) {
       setFormData({ ...selectedClient })
-      setIsEditing(false) 
+      setIsEditing(false)
     }
   }, [selectedClient])
 
@@ -95,14 +95,14 @@ export function ClientManagement() {
   // Memoized Data Organization
   const clientsData = useMemo(() => {
     const organized: Record<string, Record<string, any[]>> = {}
-    
+
     clients.forEach((client) => {
       const region = client.region || "Unknown Region"
       const building = client.building || "Unknown Building"
-      
+
       if (!organized[region]) organized[region] = {}
       if (!organized[region][building]) organized[region][building] = []
-      
+
       let tokenDisplay = client.tokenNo || ""
       if (client.ownerTokenNo && client.tenantTokenNo) {
         tokenDisplay = `Owner: ${client.ownerTokenNo} | Tenant: ${client.tenantTokenNo}`
@@ -114,7 +114,7 @@ export function ClientManagement() {
 
       organized[region][building].push({
         ...client,
-        Token_No: tokenDisplay || "N/A", 
+        Token_No: tokenDisplay || "N/A",
       })
     })
     return organized
@@ -191,10 +191,10 @@ export function ClientManagement() {
           No results found for "{searchQuery}"
         </div>
       ) : (
-        <Accordion 
-          type="multiple" 
-          className="space-y-4" 
-          value={expandedRegions} 
+        <Accordion
+          type="multiple"
+          className="space-y-4"
+          value={expandedRegions}
           onValueChange={setExpandedRegions}
         >
           {Object.entries(filteredClientsData).map(([region, buildings]) => (
@@ -204,8 +204,8 @@ export function ClientManagement() {
                   <span className="font-semibold">{region}</span>
                 </AccordionTrigger>
                 <AccordionContent className="px-6 pb-4">
-                  <Accordion 
-                    type="multiple" 
+                  <Accordion
+                    type="multiple"
                     className="space-y-3"
                     value={expandedBuildings}
                     onValueChange={setExpandedBuildings}
@@ -246,16 +246,16 @@ export function ClientManagement() {
                                           </div>
                                         </div>
                                       </div>
-                                      
+
                                       {/* Actions */}
                                       <div className="flex items-center gap-2">
                                         <Badge variant={client.agreementStatus === "active" ? "default" : "outline"}>
                                           {client.agreementStatus}
                                         </Badge>
-                                        
-                                        <Button 
-                                          variant="outline" 
-                                          size="sm" 
+
+                                        <Button
+                                          variant="outline"
+                                          size="sm"
                                           onClick={() => {
                                             setSelectedClient(client)
                                             setIsDialogOpen(true)
@@ -289,7 +289,7 @@ export function ClientManagement() {
             <DialogTitle className="text-xl">
               {isEditing ? "Edit Client Details" : selectedClient?.name}
             </DialogTitle>
-            
+
             {!isEditing ? (
               <Button variant="ghost" size="sm" onClick={() => setIsEditing(true)}>
                 <Pencil className="h-4 w-4 mr-2" />
@@ -307,14 +307,14 @@ export function ClientManagement() {
             <div className="space-y-6 py-4">
               {/* Primary Info */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                
+
                 {/* Name */}
                 <div className="space-y-2">
                   <Label>Client Name</Label>
                   {isEditing ? (
-                    <Input 
-                      value={formData.name || ""} 
-                      onChange={(e) => handleInputChange("name", e.target.value)} 
+                    <Input
+                      value={formData.name || ""}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
                     />
                   ) : (
                     <p className="font-medium p-2 bg-secondary/20 rounded-md">{selectedClient.name}</p>
@@ -325,9 +325,9 @@ export function ClientManagement() {
                 <div className="space-y-2">
                   <Label>Client Phone</Label>
                   {isEditing ? (
-                    <Input 
-                      value={formData.phone || ""} 
-                      onChange={(e) => handleInputChange("phone", e.target.value)} 
+                    <Input
+                      value={formData.phone || ""}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
                     />
                   ) : (
                     <p className="font-medium p-2 bg-secondary/20 rounded-md">{selectedClient.phone || "N/A"}</p>
@@ -338,9 +338,9 @@ export function ClientManagement() {
                 <div className="space-y-2">
                   <Label>Flat No</Label>
                   {isEditing ? (
-                    <Input 
-                      value={formData.flatNo || ""} 
-                      onChange={(e) => handleInputChange("flatNo", e.target.value)} 
+                    <Input
+                      value={formData.flatNo || ""}
+                      onChange={(e) => handleInputChange("flatNo", e.target.value)}
                     />
                   ) : (
                     <p className="font-medium p-2 bg-secondary/20 rounded-md">{selectedClient.flatNo || "N/A"}</p>
@@ -351,10 +351,10 @@ export function ClientManagement() {
                 <div className="space-y-2">
                   <Label>Status</Label>
                   {isEditing ? (
-                    <Input 
-                      value={formData.agreementStatus || ""} 
+                    <Input
+                      value={formData.agreementStatus || ""}
                       placeholder="active, pending, expired"
-                      onChange={(e) => handleInputChange("agreementStatus", e.target.value)} 
+                      onChange={(e) => handleInputChange("agreementStatus", e.target.value)}
                     />
                   ) : (
                     <p className="font-medium p-2 bg-secondary/20 rounded-md capitalize">{selectedClient.agreementStatus || "N/A"}</p>
@@ -444,18 +444,18 @@ export function ClientManagement() {
 
               {/* Agreement Details */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <div className="space-y-2">
+                <div className="space-y-2">
                   <Label>Agreement End Date</Label>
                   {isEditing ? (
-                    <Input 
+                    <Input
                       type="date"
-                      value={formatDateForInput(formData.agreementEndDate)} 
-                      onChange={(e) => handleInputChange("agreementEndDate", e.target.value)} 
+                      value={formatDateForInput(formData.agreementEndDate)}
+                      onChange={(e) => handleInputChange("agreementEndDate", e.target.value)}
                     />
                   ) : (
                     <p className="font-medium">
-                      {selectedClient.agreementEndDate 
-                        ? new Date(selectedClient.agreementEndDate).toLocaleDateString() 
+                      {selectedClient.agreementEndDate
+                        ? new Date(selectedClient.agreementEndDate).toLocaleDateString()
                         : "N/A"}
                     </p>
                   )}
