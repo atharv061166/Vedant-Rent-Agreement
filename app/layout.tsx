@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   title: "Rent Agreement Services in Pune | Vedant Enterprise",
   description:
     "Vedant Enterprise provides fast, legal, and affordable rent agreement services in Pune. Doorstep biometric process, same-day registration, and trusted documentation.",
+  icons: {
+    icon: "/fevicon.png",
+  },
 }
 
 export default function RootLayout({
