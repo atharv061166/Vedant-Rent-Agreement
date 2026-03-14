@@ -149,7 +149,7 @@ const CreateFolderDialog = ({
     // ✅ AUTO-CREATE AGENTS IF THEY DON'T EXIST
     const agentsToCreate: any[] = [];
     if (formData.ownerAgent) {
-      agentsToCreate.push({ name: formData.ownerAgent, phone: "", email: "" });
+    agentsToCreate.push({ name: formData.ownerAgent.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()), phone: "", email: "" });
     }
     // Tenant agent creation removed as per requirements
 
@@ -1054,15 +1054,15 @@ export function OngoingAgreements() {
     const ownerName = data.owner?.clientName || "";
     const tenantName = data.tenant?.clientName || "";
 
-    const matchesSearch =
-      folderName.toLowerCase().includes(searchLower) ||
-      ownerName.toLowerCase().includes(searchLower) ||
-      tenantName.toLowerCase().includes(searchLower) ||
-      (infoSource && infoSource.building?.toLowerCase().includes(searchLower)) ||
-      ownerAgent.toLowerCase().includes(searchLower) ||
-      tenantAgent.toLowerCase().includes(searchLower)
+  const matchesSearch =
+  folderName.toLowerCase().includes(searchLower) ||
+  ownerName.toLowerCase().includes(searchLower) ||
+  tenantName.toLowerCase().includes(searchLower) ||
+  (data.building?.toLowerCase().includes(searchLower)) ||
+  ownerAgent.toLowerCase().includes(searchLower) ||
+  tenantAgent.toLowerCase().includes(searchLower)
 
-    const matchesRegion = regionFilter === "all" || infoSource?.region === regionFilter
+  const matchesRegion = regionFilter === "all" || data.region === regionFilter
 
     return matchesSearch && matchesRegion
   })
