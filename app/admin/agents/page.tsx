@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Briefcase, Search, Phone, Mail, TrendingUp, User, Building, MapPin, Calendar, FileText, Folder } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import {
     Dialog,
@@ -37,6 +38,7 @@ export default function AgentsPage() {
     const [searchQuery, setSearchQuery] = useState("")
     const [loading, setLoading] = useState(true)
     const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null)
+    const [isResetting, setIsResetting] = useState(false)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -107,6 +109,33 @@ export default function AgentsPage() {
     };
 
     // Filter Agents
+    const handleReset = async (agentName: string) => {
+        if (!confirm(`Are you sure you want to reset the total calculated commission for ${agentName} to zero?`)) return;
+        
+        setIsResetting(true)
+        try {
+            const res = await fetch("/api/agents", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ agentName })
+            })
+            if (!res.ok) throw new Error("Failed to reset")
+            
+            // Optimistically update the UI by modifying current agreements state
+            setAgreements(prev => prev.map(a => {
+                if (a.owner?.agentName === agentName) {
+                    return { ...a, ownerAgentCommission: 0 }
+                }
+                return a
+            }))
+        } catch (error) {
+            console.error(error)
+            alert("Failed to reset commission")
+        } finally {
+            setIsResetting(false)
+        }
+    }
+
     const ownerAgentNames = new Set(agreements.map(a => a.owner?.agentName).filter(Boolean));
 
     const filteredAgents = agents.filter(agent => {
@@ -243,9 +272,19 @@ export default function AgentsPage() {
 
                                 <div className="flex justify-between items-center pt-4 border-t mt-4">
                                     <span className="font-semibold text-slate-700">Total Calculated</span>
-                                    <span className="font-bold text-xl text-emerald-600">
-                                        ₹{agentCommissions[selectedAgent.id]?.toLocaleString()}
-                                    </span>
+                                    <div className="flex items-center gap-4">
+                                        <span className="font-bold text-xl text-emerald-600">
+                                            ₹{agentCommissions[selectedAgent.id]?.toLocaleString() || "0"}
+                                        </span>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => handleReset(selectedAgent.name)}
+                                            disabled={isResetting || !agentCommissions[selectedAgent.id]}
+                                        >
+                                            {isResetting ? "Resetting..." : "Reset to Zero"}
+                                        </Button>
+                                    </div>
                                 </div>
                             </div>
                         ) : (

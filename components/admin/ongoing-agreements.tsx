@@ -149,8 +149,10 @@ const CreateFolderDialog = ({
     // ✅ AUTO-CREATE AGENTS IF THEY DON'T EXIST
     const agentsToCreate: any[] = [];
     if (formData.ownerAgent) {
-    agentsToCreate.push({ name: formData.ownerAgent.trim().toLowerCase().replace(/\b\w/g, c => c.toUpperCase()), phone: "", email: "" });
-    }
+  const normalizedAgent = formData.ownerAgent.trim().toLowerCase().replace(/\b\w/g, (c: string) => c.toUpperCase());
+  agentsToCreate.push({ name: normalizedAgent, phone: "", email: "" });
+  payload.owner.agentName = normalizedAgent; // ✅ also normalize what gets saved to the folder
+}
     // Tenant agent creation removed as per requirements
 
     // Process agent creation in background (don't block UI)
@@ -431,7 +433,7 @@ const PersonCard = ({
 
 
   // ✅ local editable amount
-  const [amount, setAmount] = useState<number>(data.amount || 0)
+  const [amount, setAmount] = useState<number>(data?.amount || 0)
   const [saving, setSaving] = useState(false)
 
   // ✅ save updated amount to firebase

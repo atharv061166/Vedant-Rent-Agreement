@@ -20,16 +20,21 @@ export async function GET() {
 export async function POST(req: Request) {
     try {
         const body = await req.json();
-        const { name, phone, email } = body;
+        const { phone, email } = body;
 
-        if (!name) {
-            return NextResponse.json({ error: "Agent Name is required" }, { status: 400 });
-        }
+// Normalize name to Title Case
+const name = body.name
+    ? body.name.trim().toLowerCase().replace(/\b\w/g, (c: string) => c.toUpperCase())
+    : "";
 
-        const agentsRef = adminDb.collection("agents");
+if (!name) {
+    return NextResponse.json({ error: "Agent Name is required" }, { status: 400 });
+}
 
-        // Check if agent already exists
-        const snapshot = await agentsRef.where("name", "==", name).get();
+const agentsRef = adminDb.collection("agents");
+
+// Check if agent already exists (case-insensitive via normalized name)
+const snapshot = await agentsRef.where("name", "==", name).get();
 
         if (!snapshot.empty) {
             // Agent exists, return the existing one
@@ -54,6 +59,35 @@ export async function POST(req: Request) {
             message: "Agent created successfully",
             agent: { id: docRef.id, ...newAgent }
         });
+
+    } catch (error: any) {
+        return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+}
+
+export async function PATCH(req: Request) {
+    try {
+        const body = await req.json();
+        const { agentName } = body;
+
+        if (!agentName) {
+            return NextResponse.json({ error: "Agent Name is required" }, { status: 400 });
+        }
+
+        const agreementsRef = adminDb.collection("agreements");
+        const snapshot = await agreementsRef.where("owner.agentName", "==", agentName).get();
+
+        const batch = adminDb.batch();
+
+        snapshot.docs.forEach((doc) => {
+            batch.update(doc.ref, {
+                ownerAgentCommission: 0
+            });
+        });
+
+        await batch.commit();
+
+        return NextResponse.json({ message: "Agent commission reset to zero" });
 
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 500 });
