@@ -47,25 +47,21 @@ export function DashboardStats() {
     {
       label: "Total Agreements",
       value: stats.totalAgreements.toLocaleString(),
-      change: "+12%",
       icon: FileText,
     },
     {
       label: "Monthly Agreements",
       value: stats.monthlyAgreements.toLocaleString(),
-      change: "+8%",
       icon: TrendingUp,
     },
     {
       label: "Total Revenue",
       value: formatRevenue(stats.totalRevenue),
-      change: "+15%",
       icon: IndianRupee,
     },
     {
       label: "Active Clients",
       value: stats.activeClients.toLocaleString(),
-      change: "+5%",
       icon: Users,
     },
   ]
@@ -85,10 +81,6 @@ export function DashboardStats() {
                 <div className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center">
                   <Icon className="h-5 w-5 text-primary" />
                 </div>
-
-                <span className="text-sm font-semibold text-emerald-600">
-                  {stat.change}
-                </span>
               </div>
 
               <div className="text-2xl font-bold tracking-tight text-foreground">
